@@ -1,0 +1,178 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>NetDoctor report</title><style>
+body{font:15px/1.5 system-ui,sans-serif;max-width:980px;margin:2rem auto;padding:0 1rem;color:#1a2330}
+.verdict{padding:1rem 1.2rem;border-radius:8px;font-weight:600;font-size:1.1rem}
+.verdict.bad{background:#fde8e8;border-left:6px solid #c62828}.verdict.mid{background:#fff4e0;border-left:6px solid #ef8f00}.verdict.ok{background:#e6f5ea;border-left:6px solid #2e7d32}
+.card{border:1px solid #d5dbe3;border-left-width:6px;border-radius:8px;padding:.2rem 1rem 1rem;margin:1rem 0}
+.card.attack{border-left-color:#c62828}.card.fault{border-left-color:#ef8f00}
+.tag{font-size:.7rem;padding:.15rem .45rem;border-radius:4px;color:#fff}.tag.attack{background:#c62828}.tag.fault{background:#ef8f00}
+small{color:#667;font-weight:400;margin-left:.5rem}pre{background:#0f1720;color:#d6e2f0;padding:.8rem;overflow:auto;border-radius:6px;font-size:12px}
+.row{display:flex;align-items:center;margin:3px 0}.lbl{width:42%;font-size:13px;color:#1a2330;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track{position:relative;flex:1;height:14px;background:#eef1f5;border-radius:7px}.bar{position:absolute;top:0;height:14px;border-radius:7px;min-width:6px}
+.bar.attack{background:#c62828}.bar.fault{background:#ef8f00}.warn{color:#8a5a00}</style></head><body>
+<h1>NetDoctor report</h1><p>08_mixed_incident.pcap · 258 packets · 88.5 s · {&quot;TCP&quot;: 206, &quot;UDP&quot;: 18, &quot;ICMP&quot;: 2, &quot;ARP&quot;: 32}</p>
+<div class="verdict bad">ATTACK: malicious activity found, and some of the faults are probably its side effects</div>
+<h2>Timeline</h2><div class="row"><a href="#f1" class="lbl">1. Port scan from 10.0.0.99</a><div class="track"><div class="bar attack" style="left:45.20%;width:4.46%"></div></div></div><div class="row"><a href="#f2" class="lbl">2. ARP spoofing by de:ad:be:ef:00:66</a><div class="track"><div class="bar attack" style="left:67.80%;width:32.20%"></div></div></div><div class="row"><a href="#f3" class="lbl">3. TCP retransmissions 192.168.1.11 → 192.168.1.50</a><div class="track"><div class="bar fault" style="left:0.79%;width:16.95%"></div></div></div><div class="row"><a href="#f4" class="lbl">4. TCP retransmissions 192.168.1.10 → 93.184.216.34</a><div class="track"><div class="bar fault" style="left:72.32%;width:8.02%"></div></div></div><div class="row"><a href="#f5" class="lbl">5. 192.168.1.99:22 does not answer 192.168.1.11</a><div class="track"><div class="bar fault" style="left:2.26%;width:6.78%"></div></div></div><div class="row"><a href="#f6" class="lbl">6. DNS server 192.168.1.2 is not answering</a><div class="track"><div class="bar fault" style="left:3.39%;width:3.39%"></div></div></div><div class="row"><a href="#f7" class="lbl">7. MTU mismatch reported by 192.168.1.1</a><div class="track"><div class="bar fault" style="left:33.90%;width:1.13%"></div></div></div><div class="row"><a href="#f8" class="lbl">8. Connections to 192.168.1.50:3306 are being reset</a><div class="track"><div class="bar fault" style="left:2.26%;width:3.39%"></div></div></div><div class="row"><a href="#f9" class="lbl">9. DNS lookups failing: NXDOMAIN (name does not exist)</a><div class="track"><div class="bar fault" style="left:9.07%;width:3.39%"></div></div></div><div class="row"><a href="#f10" class="lbl">10. Very slow connection setup to 203.0.113.9:443</a><div class="track"><div class="bar fault" style="left:19.21%;width:10.85%"></div></div></div><div class="row"><a href="#f11" class="lbl">11. Possible MTU mismatch 192.168.1.11 → 192.168.1.50</a><div class="track"><div class="bar fault" style="left:0.79%;width:16.95%"></div></div></div><div class="row"><a href="#f12" class="lbl">12. Unusually slow DNS answers</a><div class="track"><div class="bar fault" style="left:14.69%;width:4.97%"></div></div></div>
+<h2>Findings</h2><section class="card attack" id="f1">
+<h3><span class="tag attack">ATTACK</span> Port scan from 10.0.0.99
+<small>high severity · 99% confidence</small></h3>
+<p><b>What happened:</b> 10.0.0.99 knocked on 80 different TCP ports on 192.168.1.50 within 4.0 seconds, and almost none of the connections were completed. 78 probes were refused, and open ports found: 22, 80. Real programs do not behave this way; this is someone mapping what is reachable.</p><p><b>Likely cause:</b> A scanning tool (nmap-style) run by an attacker, a compromised machine, or an unauthorised/forgotten security scan.</p>
+<p><b>Suggested fix:</b> Find out who owns 10.0.0.99. If it is not an approved scan, block it at the firewall and check that machine for malware. Close or firewall every port you do not need.</p>
+<details><summary>Evidence: 80 packets (showing 40)</summary><pre>#57     +  40.000s  TCP 10.0.0.99:50000 -&gt; 192.168.1.50:1 [SYN] seq=777 len=0
+#59     +  40.050s  TCP 10.0.0.99:50001 -&gt; 192.168.1.50:2 [SYN] seq=777 len=0
+#61     +  40.100s  TCP 10.0.0.99:50002 -&gt; 192.168.1.50:3 [SYN] seq=777 len=0
+#63     +  40.150s  TCP 10.0.0.99:50003 -&gt; 192.168.1.50:4 [SYN] seq=777 len=0
+#65     +  40.200s  TCP 10.0.0.99:50004 -&gt; 192.168.1.50:5 [SYN] seq=777 len=0
+#67     +  40.250s  TCP 10.0.0.99:50005 -&gt; 192.168.1.50:6 [SYN] seq=777 len=0
+#69     +  40.300s  TCP 10.0.0.99:50006 -&gt; 192.168.1.50:7 [SYN] seq=777 len=0
+#71     +  40.350s  TCP 10.0.0.99:50007 -&gt; 192.168.1.50:8 [SYN] seq=777 len=0
+#73     +  40.400s  TCP 10.0.0.99:50008 -&gt; 192.168.1.50:9 [SYN] seq=777 len=0
+#75     +  40.450s  TCP 10.0.0.99:50009 -&gt; 192.168.1.50:10 [SYN] seq=777 len=0
+#77     +  40.500s  TCP 10.0.0.99:50010 -&gt; 192.168.1.50:11 [SYN] seq=777 len=0
+#79     +  40.550s  TCP 10.0.0.99:50011 -&gt; 192.168.1.50:12 [SYN] seq=777 len=0
+#81     +  40.600s  TCP 10.0.0.99:50012 -&gt; 192.168.1.50:13 [SYN] seq=777 len=0
+#83     +  40.650s  TCP 10.0.0.99:50013 -&gt; 192.168.1.50:14 [SYN] seq=777 len=0
+#85     +  40.700s  TCP 10.0.0.99:50014 -&gt; 192.168.1.50:15 [SYN] seq=777 len=0
+#87     +  40.750s  TCP 10.0.0.99:50015 -&gt; 192.168.1.50:16 [SYN] seq=777 len=0
+#89     +  40.800s  TCP 10.0.0.99:50016 -&gt; 192.168.1.50:17 [SYN] seq=777 len=0
+#91     +  40.850s  TCP 10.0.0.99:50017 -&gt; 192.168.1.50:18 [SYN] seq=777 len=0
+#93     +  40.900s  TCP 10.0.0.99:50018 -&gt; 192.168.1.50:19 [SYN] seq=777 len=0
+#95     +  40.950s  TCP 10.0.0.99:50019 -&gt; 192.168.1.50:20 [SYN] seq=777 len=0
+#97     +  41.000s  TCP 10.0.0.99:50020 -&gt; 192.168.1.50:21 [SYN] seq=777 len=0
+#99     +  41.050s  TCP 10.0.0.99:50021 -&gt; 192.168.1.50:22 [SYN] seq=777 len=0
+#102    +  41.100s  TCP 10.0.0.99:50022 -&gt; 192.168.1.50:23 [SYN] seq=777 len=0
+#104    +  41.150s  TCP 10.0.0.99:50023 -&gt; 192.168.1.50:24 [SYN] seq=777 len=0
+#106    +  41.200s  TCP 10.0.0.99:50024 -&gt; 192.168.1.50:25 [SYN] seq=777 len=0
+#108    +  41.250s  TCP 10.0.0.99:50025 -&gt; 192.168.1.50:26 [SYN] seq=777 len=0
+#110    +  41.300s  TCP 10.0.0.99:50026 -&gt; 192.168.1.50:27 [SYN] seq=777 len=0
+#112    +  41.350s  TCP 10.0.0.99:50027 -&gt; 192.168.1.50:28 [SYN] seq=777 len=0
+#114    +  41.400s  TCP 10.0.0.99:50028 -&gt; 192.168.1.50:29 [SYN] seq=777 len=0
+#116    +  41.450s  TCP 10.0.0.99:50029 -&gt; 192.168.1.50:30 [SYN] seq=777 len=0
+#118    +  41.500s  TCP 10.0.0.99:50030 -&gt; 192.168.1.50:31 [SYN] seq=777 len=0
+#120    +  41.550s  TCP 10.0.0.99:50031 -&gt; 192.168.1.50:32 [SYN] seq=777 len=0
+#122    +  41.600s  TCP 10.0.0.99:50032 -&gt; 192.168.1.50:33 [SYN] seq=777 len=0
+#124    +  41.650s  TCP 10.0.0.99:50033 -&gt; 192.168.1.50:34 [SYN] seq=777 len=0
+#126    +  41.700s  TCP 10.0.0.99:50034 -&gt; 192.168.1.50:35 [SYN] seq=777 len=0
+#128    +  41.750s  TCP 10.0.0.99:50035 -&gt; 192.168.1.50:36 [SYN] seq=777 len=0
+#130    +  41.800s  TCP 10.0.0.99:50036 -&gt; 192.168.1.50:37 [SYN] seq=777 len=0
+#132    +  41.850s  TCP 10.0.0.99:50037 -&gt; 192.168.1.50:38 [SYN] seq=777 len=0
+#134    +  41.900s  TCP 10.0.0.99:50038 -&gt; 192.168.1.50:39 [SYN] seq=777 len=0
+#136    +  41.950s  TCP 10.0.0.99:50039 -&gt; 192.168.1.50:40 [SYN] seq=777 len=0</pre></details></section><section class="card attack" id="f2">
+<h3><span class="tag attack">ATTACK</span> ARP spoofing by de:ad:be:ef:00:66
+<small>high severity · 95% confidence</small></h3>
+<p><b>What happened:</b> Device de:ad:be:ef:00:66 keeps announcing that it owns 192.168.1.10, 192.168.1.1 (the gateway), addresses that belong to other devices. It sent 28 ARP replies nobody asked for. Computers that believe it send their traffic to the impostor instead of the real device, so it can read or alter that traffic (man-in-the-middle). It poisons both sides of a conversation at once, the typical man-in-the-middle setup.</p><p><b>Likely cause:</b> An attacker on the local network running an ARP-poisoning tool.</p>
+<p><b>Suggested fix:</b> Locate the device with MAC de:ad:be:ef:00:66 (switch port table) and disconnect it. Enable Dynamic ARP Inspection / port security if your switch supports it, and use static ARP entries for the gateway on critical machines.</p>
+<details><summary>Evidence: 30 packets (showing 30)</summary><pre>#219    +  60.000s  ARP who-has 192.168.1.1 tell 192.168.1.10
+#220    +  60.001s  ARP 192.168.1.1 is-at aa:aa:aa:00:00:01
+#223    +  62.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#224    +  62.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#229    +  64.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#231    +  64.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#233    +  66.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#234    +  66.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#236    +  68.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#237    +  68.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#238    +  70.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#239    +  70.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#241    +  72.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#242    +  72.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#243    +  74.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#244    +  74.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#245    +  76.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#246    +  76.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#247    +  78.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#248    +  78.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#249    +  80.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#250    +  80.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#251    +  82.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#252    +  82.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#253    +  84.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#254    +  84.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#255    +  86.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#256    +  86.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66
+#257    +  88.000s  ARP 192.168.1.1 is-at de:ad:be:ef:00:66
+#258    +  88.500s  ARP 192.168.1.10 is-at de:ad:be:ef:00:66</pre></details></section><section class="card fault" id="f3">
+<h3><span class="tag fault">FAULT</span> TCP retransmissions 192.168.1.11 → 192.168.1.50
+<small>high severity · 90% confidence</small></h3>
+<p><b>What happened:</b> 192.168.1.11 had to resend data to 192.168.1.50 5 times (83% of its segments) because the other side never confirmed receiving it. The traffic is not diverse (no port fan-out, no spoofing), which points to packet loss on the path and not to an attack.</p><p><b>Likely cause:</b> Packet loss: congested or failing link, bad cable/Wi-Fi signal, overloaded device, or a firewall dropping packets.</p>
+<p><b>Suggested fix:</b> Ping/traceroute to the destination to find where loss begins, check cables and Wi-Fi signal, look at interface error counters, and check for a saturated link.</p>
+<details><summary>Evidence: 5 packets (showing 5)</summary><pre>#5      +   0.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#7      +   1.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#14     +   3.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#23     +   7.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#37     +  15.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400</pre></details></section><section class="card fault" id="f4">
+<h3><span class="tag fault">FAULT</span> TCP retransmissions 192.168.1.10 → 93.184.216.34
+<small>high severity · 90% confidence</small></h3>
+<p><b>What happened:</b> 192.168.1.10 had to resend data to 93.184.216.34 4 times (80% of its segments) because the other side never confirmed receiving it. The traffic is not diverse (no port fan-out, no spoofing), which points to packet loss on the path and not to an attack. Note: these hosts also appear in the attack finding &#x27;ARP spoofing by de:ad:be:ef:00:66&#x27;, so this problem may be a side effect of the attack. Deal with the attack first.</p><p><b>Likely cause:</b> Packet loss: congested or failing link, bad cable/Wi-Fi signal, overloaded device, or a firewall dropping packets.</p>
+<p><b>Suggested fix:</b> Ping/traceroute to the destination to find where loss begins, check cables and Wi-Fi signal, look at interface error counters, and check for a saturated link.</p>
+<details><summary>Evidence: 4 packets (showing 4)</summary><pre>#230    +  64.000s  TCP 192.168.1.10:46000 -&gt; 93.184.216.34:443 [ACK,PSH] seq=1001 len=600
+#232    +  65.100s  TCP 192.168.1.10:46000 -&gt; 93.184.216.34:443 [ACK,PSH] seq=1001 len=600
+#235    +  67.100s  TCP 192.168.1.10:46000 -&gt; 93.184.216.34:443 [ACK,PSH] seq=1001 len=600
+#240    +  71.100s  TCP 192.168.1.10:46000 -&gt; 93.184.216.34:443 [ACK,PSH] seq=1001 len=600</pre></details></section><section class="card fault" id="f5">
+<h3><span class="tag fault">FAULT</span> 192.168.1.99:22 does not answer 192.168.1.11
+<small>high severity · 90% confidence</small></h3>
+<p><b>What happened:</b> 192.168.1.11 tried to open a connection to 192.168.1.99 port 22 and re-sent its request 3 times with no reply at all. The service is unreachable.</p><p><b>Likely cause:</b> The server is down, a firewall is silently dropping the traffic, or routing is broken.</p>
+<p><b>Suggested fix:</b> Check that 192.168.1.99 is powered on and that port 22 is listening, then test the route and any firewall rules between the two.</p>
+<details><summary>Evidence: 3 packets (showing 3)</summary><pre>#8      +   2.000s  TCP 192.168.1.11:43000 -&gt; 192.168.1.99:22 [SYN] seq=5000 len=0
+#15     +   4.000s  TCP 192.168.1.11:43000 -&gt; 192.168.1.99:22 [SYN] seq=5000 len=0
+#24     +   8.000s  TCP 192.168.1.11:43000 -&gt; 192.168.1.99:22 [SYN] seq=5000 len=0</pre></details></section><section class="card fault" id="f6">
+<h3><span class="tag fault">FAULT</span> DNS server 192.168.1.2 is not answering
+<small>high severity · 85% confidence</small></h3>
+<p><b>What happened:</b> 4 DNS questions sent to 192.168.1.2 never got a reply. Without DNS most websites and services appear &#x27;down&#x27; even though the link itself works.</p><p><b>Likely cause:</b> DNS server down or unreachable, traffic to port 53 blocked, or the server is overloaded.</p>
+<p><b>Suggested fix:</b> Check that 192.168.1.2 is up and reachable, try another resolver (e.g. the router or 1.1.1.1) and review firewall rules for UDP/TCP port 53.</p>
+<details><summary>Evidence: 4 packets (showing 4)</summary><pre>#12     +   3.000s  DNS 192.168.1.11 -&gt; 192.168.1.2 id=200 intranet0.corp.local query
+#17     +   4.000s  DNS 192.168.1.11 -&gt; 192.168.1.2 id=201 intranet1.corp.local query
+#20     +   5.000s  DNS 192.168.1.11 -&gt; 192.168.1.2 id=202 intranet2.corp.local query
+#22     +   6.000s  DNS 192.168.1.11 -&gt; 192.168.1.2 id=203 intranet3.corp.local query</pre></details></section><section class="card fault" id="f7">
+<h3><span class="tag fault">FAULT</span> MTU mismatch reported by 192.168.1.1
+<small>medium severity · 90% confidence</small></h3>
+<p><b>What happened:</b> 192.168.1.1 told senders 2 time(s) that their packets were too big to forward (ICMP &#x27;fragmentation needed&#x27;), advertising a maximum size of 1400 bytes. Large transfers stall or are slow while small ones work. Note: these hosts also appear in the attack finding &#x27;ARP spoofing by de:ad:be:ef:00:66&#x27;, so this problem may be a side effect of the attack. Deal with the attack first.</p><p><b>Likely cause:</b> A link in the path (VPN/tunnel/PPPoE/jumbo-frame mismatch) has a smaller MTU than the endpoints assume.</p>
+<p><b>Suggested fix:</b> Set the MTU on the endpoints (or clamp TCP MSS on the router) to at most 1400 bytes, or fix the mismatched link.</p>
+<details><summary>Evidence: 2 packets (showing 2)</summary><pre>#54     +  30.000s  ICMP 192.168.1.1 -&gt; 192.168.1.11 type=3 code=4
+#55     +  31.000s  ICMP 192.168.1.1 -&gt; 192.168.1.11 type=3 code=4</pre></details></section><section class="card fault" id="f8">
+<h3><span class="tag fault">FAULT</span> Connections to 192.168.1.50:3306 are being reset
+<small>medium severity · 80% confidence</small></h3>
+<p><b>What happened:</b> 192.168.1.50 port 3306 rejected 4 connection attempts straight away (RST): nothing is listening there or a firewall is rejecting it.</p><p><b>Likely cause:</b> The service is stopped, on a different port, or a firewall rejects the traffic.</p>
+<p><b>Suggested fix:</b> Start the service or correct the port/firewall rule.</p>
+<details><summary>Evidence: 4 packets (showing 4)</summary><pre>#10     +   2.001s  TCP 192.168.1.50:3306 -&gt; 192.168.1.11:44000 [ACK,RST] seq=0 len=0
+#13     +   3.001s  TCP 192.168.1.50:3306 -&gt; 192.168.1.11:44001 [ACK,RST] seq=0 len=0
+#18     +   4.001s  TCP 192.168.1.50:3306 -&gt; 192.168.1.11:44002 [ACK,RST] seq=0 len=0
+#21     +   5.001s  TCP 192.168.1.50:3306 -&gt; 192.168.1.11:44003 [ACK,RST] seq=0 len=0</pre></details></section><section class="card fault" id="f9">
+<h3><span class="tag fault">FAULT</span> DNS lookups failing: NXDOMAIN (name does not exist)
+<small>medium severity · 80% confidence</small></h3>
+<p><b>What happened:</b> 4 DNS lookups returned NXDOMAIN (name does not exist); most affected names: typo0.example.com, typo1.example.com, typo2.example.com. Programs asking for these names cannot connect. Note: these hosts also appear in the attack finding &#x27;ARP spoofing by de:ad:be:ef:00:66&#x27;, so this problem may be a side effect of the attack. Deal with the attack first.</p><p><b>Likely cause:</b> A mistyped or expired domain, a broken DNS server/forwarder, or a misconfigured search domain.</p>
+<p><b>Suggested fix:</b> Test with `nslookup &lt;name&gt; &lt;server&gt;`, try a different resolver, and check the DNS server logs/settings.</p>
+<details><summary>Evidence: 4 packets (showing 4)</summary><pre>#26     +   8.030s  DNS 192.168.1.1 -&gt; 192.168.1.11 id=300 typo0.example.com response rcode=3 
+#28     +   9.030s  DNS 192.168.1.1 -&gt; 192.168.1.11 id=301 typo1.example.com response rcode=3 
+#30     +  10.030s  DNS 192.168.1.1 -&gt; 192.168.1.11 id=302 typo2.example.com response rcode=3 
+#32     +  11.030s  DNS 192.168.1.1 -&gt; 192.168.1.11 id=303 typo3.example.com response rcode=3 </pre></details></section><section class="card fault" id="f10">
+<h3><span class="tag fault">FAULT</span> Very slow connection setup to 203.0.113.9:443
+<small>medium severity · 75% confidence</small></h3>
+<p><b>What happened:</b> 3 connections to 203.0.113.9:443 needed over 1 s just to get the first reply (median 1.6 s). Users see this as &#x27;the site hangs before loading&#x27;.</p><p><b>Likely cause:</b> A congested or distant link, an overloaded server, or lost SYN packets that had to be re-sent.</p>
+<p><b>Suggested fix:</b> Test round-trip time with ping/mtr to the server, check server load and link utilisation.</p>
+<details><summary>Evidence: 6 packets (showing 6)</summary><pre>#39     +  17.000s  TCP 192.168.1.11:45000 -&gt; 203.0.113.9:443 [SYN] seq=1000 len=0
+#41     +  18.600s  TCP 203.0.113.9:443 -&gt; 192.168.1.11:45000 [SYN,ACK] seq=5000 len=0
+#43     +  21.000s  TCP 192.168.1.11:45001 -&gt; 203.0.113.9:443 [SYN] seq=1000 len=0
+#45     +  22.600s  TCP 203.0.113.9:443 -&gt; 192.168.1.11:45001 [SYN,ACK] seq=5000 len=0
+#48     +  25.000s  TCP 192.168.1.11:45002 -&gt; 203.0.113.9:443 [SYN] seq=1000 len=0
+#50     +  26.600s  TCP 203.0.113.9:443 -&gt; 192.168.1.11:45002 [SYN,ACK] seq=5000 len=0</pre></details></section><section class="card fault" id="f11">
+<h3><span class="tag fault">FAULT</span> Possible MTU mismatch 192.168.1.11 → 192.168.1.50
+<small>medium severity · 50% confidence</small></h3>
+<p><b>What happened:</b> 100% of the resent segments are large (1300+ bytes). Small packets work but big ones vanish, the classic sign of a path whose MTU is smaller than expected.</p><p><b>Likely cause:</b> A tunnel/VPN/PPPoE link with a smaller MTU where ICMP &#x27;fragmentation needed&#x27; messages are blocked.</p>
+<p><b>Suggested fix:</b> Lower the MTU/MSS (for example MSS clamping to 1360-1452) on the router or tunnel and allow ICMP type 3 code 4 through firewalls.</p>
+<details><summary>Evidence: 5 packets (showing 5)</summary><pre>#5      +   0.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#7      +   1.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#14     +   3.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#23     +   7.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400
+#37     +  15.700s  TCP 192.168.1.11:42000 -&gt; 192.168.1.50:8080 [ACK,PSH] seq=1001 len=1400</pre></details></section><section class="card fault" id="f12">
+<h3><span class="tag fault">FAULT</span> Unusually slow DNS answers
+<small>low severity · 70% confidence</small></h3>
+<p><b>What happened:</b> 3 DNS lookups took over 1 s to answer (median 2.4 s). Every web page or app start has to wait for this, so the network feels slow. Note: these hosts also appear in the attack finding &#x27;ARP spoofing by de:ad:be:ef:00:66&#x27;, so this problem may be a side effect of the attack. Deal with the attack first.</p><p><b>Likely cause:</b> An overloaded or distant DNS server, or a lossy path to it.</p>
+<p><b>Suggested fix:</b> Use a closer/faster resolver, check packet loss towards the DNS server.</p>
+<details><summary>Evidence: 6 packets (showing 6)</summary><pre>#33     +  13.000s  DNS 192.168.1.11 -&gt; 192.168.1.1 id=400 slow0.example.com query
+#34     +  14.000s  DNS 192.168.1.11 -&gt; 192.168.1.1 id=401 slow1.example.com query
+#35     +  15.000s  DNS 192.168.1.11 -&gt; 192.168.1.1 id=402 slow2.example.com query
+#36     +  15.400s  DNS 192.168.1.1 -&gt; 192.168.1.11 id=400 slow0.example.com response rcode=0 93.184.216.34
+#38     +  16.400s  DNS 192.168.1.1 -&gt; 192.168.1.11 id=401 slow1.example.com response rcode=0 93.184.216.34
+#40     +  17.400s  DNS 192.168.1.1 -&gt; 192.168.1.11 id=402 slow2.example.com response rcode=0 93.184.216.34</pre></details></section></body></html>
